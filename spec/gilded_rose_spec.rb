@@ -1,7 +1,6 @@
-require 'gilded_rose'
+require "gilded_rose"
 
 describe GildedRose do
-
   # describe "#update_quality" do
   #   xit "does not change the name" do
   #     items = [Item.new("foo", 0, 0)]
@@ -11,7 +10,6 @@ describe GildedRose do
   # end
 
   describe "#update_quality v2" do
-
     describe "works with normal items"
 
     it "reduces sell_in by 1" do
@@ -21,9 +19,7 @@ describe GildedRose do
       allow(normal).to receive(:sell_in).and_return(10, 9)
       allow(normal).to receive(:sell_in=)
       grose = GildedRose.new([normal])
-      expect{ grose.update_quality }.to change { normal.sell_in }.by -1
+      expect { grose.update_quality }.to change { normal.sell_in }.by(-1)
     end
-
   end
-
 end

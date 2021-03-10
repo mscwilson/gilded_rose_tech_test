@@ -2,5 +2,5 @@
 
 source "https://rubygems.org"
 
-gem 'simplecov'
-gem 'rubocop'
+gem "rubocop"
+gem "simplecov"
