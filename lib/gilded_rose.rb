@@ -6,7 +6,10 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
+      p item
+      p item.name
       if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
+        p "should see this"
         if item.quality > 0
           if item.name != "Sulfuras, Hand of Ragnaros"
             item.quality = item.quality - 1
@@ -30,7 +33,10 @@ class GildedRose
         end
       end
       if item.name != "Sulfuras, Hand of Ragnaros"
+        p "and this"
+        p item.sell_in
         item.sell_in = item.sell_in - 1
+        p item.sell_in
       end
       if item.sell_in < 0
         if item.name != "Aged Brie"
@@ -53,16 +59,3 @@ class GildedRose
   end
 end
 
-class Item
-  attr_accessor :name, :sell_in, :quality
-
-  def initialize(name, sell_in, quality)
-    @name = name
-    @sell_in = sell_in
-    @quality = quality
-  end
-
-  def to_s()
-    "#{@name}, #{@sell_in}, #{@quality}"
-  end
-end
