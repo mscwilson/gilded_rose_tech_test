@@ -3,3 +3,20 @@ My attempt at the [Gilded Rose](https://github.com/emilybache/GildedRose-Refacto
 
 # Specification/Story
 The specification can be found [here](https://github.com/emilybache/GildedRose-Refactoring-Kata/blob/master/GildedRoseRequirements.txt). The code belongs to a magical inn, and relates to inventory and item sell by dates. One of the existing classes mustn't be edited.
+
+
+Classes
+Item
+---
+name
+sell_in
+quality
+---
+to_s (ie string representation)
+
+
+GildedRose
+---
+items - given as arg, a list of Items
+---
+update_quality
