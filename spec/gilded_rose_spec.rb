@@ -2,11 +2,17 @@
 
 require "gilded_rose"
 
+DEFAULT_SELL_IN = 15
+NEGATIVE_SELL_IN = -5
+DEFAULT_QUALITY = 20
+MAXIMUM_QUALITY = GildedRose::MAXIMUM_QUALITY
+SULFURAS_QUALITY = 80
+
 describe GildedRose do
   describe "#update_all" do
     describe "for normal items" do
       before do
-        @normal = Item.new("normal item", 10, 20)
+        @normal = Item.new("normal item", DEFAULT_SELL_IN, DEFAULT_QUALITY)
         @shop = GildedRose.new([@normal])
       end
 
@@ -19,12 +25,12 @@ describe GildedRose do
       end
 
       it "doesn't reduce quality beyond 0" do
-        21.times { @shop.update_all }
+        (DEFAULT_QUALITY + 1).times { @shop.update_all }
         expect(@normal.quality).to eq 0
       end
 
       it "reduces quality by 2 if past sell by date" do
-        normal_past_date = Item.new("normal", -5, 20)
+        normal_past_date = Item.new("normal", NEGATIVE_SELL_IN, DEFAULT_QUALITY)
         shop = GildedRose.new([normal_past_date])
         expect { shop.update_all }.to change { normal_past_date.quality }.by(-2)
       end
@@ -32,7 +38,7 @@ describe GildedRose do
 
     describe "for aged brie" do
       before do
-        @brie = Item.new(name = "Aged Brie", sell_in = 2, quality = 0)
+        @brie = Item.new("Aged Brie", DEFAULT_SELL_IN, DEFAULT_QUALITY)
         @shop = GildedRose.new([@brie])
       end
 
@@ -45,7 +51,7 @@ describe GildedRose do
       end
 
       it "doesn't increase quality beyond 50" do
-        brie_high_quality = Item.new(name = "Aged Brie", sell_in = 2, quality = 50)
+        brie_high_quality = Item.new("Aged Brie", DEFAULT_SELL_IN, MAXIMUM_QUALITY)
         shop = GildedRose.new([brie_high_quality])
         expect { shop.update_all }.not_to change { brie_high_quality.quality }
       end
@@ -53,7 +59,7 @@ describe GildedRose do
 
     describe "for sulfuras" do
       before do
-        @sulfuras = Item.new(name = "Sulfuras, Hand of Ragnaros", sell_in = 0, quality = 80)
+        @sulfuras = Item.new("Sulfuras, Hand of Ragnaros", DEFAULT_SELL_IN, SULFURAS_QUALITY)
         @shop = GildedRose.new([@sulfuras])
       end
 
@@ -63,13 +69,13 @@ describe GildedRose do
 
       it "does not change quality" do
         expect { @shop.update_all }.not_to change { @sulfuras.quality }
-        expect(@sulfuras.quality).to eq 80
+        expect(@sulfuras.quality).to eq SULFURAS_QUALITY
       end
     end
 
     describe "for backstage passes" do
       before do
-        @pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 15, quality = 20)
+        @pass = Item.new("Backstage passes to a TAFKAL80ETC concert", DEFAULT_SELL_IN, DEFAULT_QUALITY)
         @shop = GildedRose.new([@pass])
       end
 
@@ -82,34 +88,34 @@ describe GildedRose do
       end
 
       it "increases quality by 2 if sell_in between 10 and 6" do
-        pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 10, quality = 20)
+        pass = Item.new("Backstage passes to a TAFKAL80ETC concert", 10, DEFAULT_QUALITY)
         shop = GildedRose.new([pass])
         expect { shop.update_all }.to change { pass.quality }.by 2
       end
 
       it "increases quality by 3 if sell_in between 5 and 1" do
-        pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 1, quality = 20)
+        pass = Item.new("Backstage passes to a TAFKAL80ETC concert", 1, DEFAULT_QUALITY)
         shop = GildedRose.new([pass])
         expect { shop.update_all }.to change { pass.quality }.by 3
       end
 
       it "sets quality to 0 if sell_in is 0 or less" do
-        pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = -5, quality = 20)
+        pass = Item.new("Backstage passes to a TAFKAL80ETC concert", NEGATIVE_SELL_IN, DEFAULT_QUALITY)
         shop = GildedRose.new([pass])
         shop.update_all
         expect(pass.quality).to eq 0
       end
 
       it "has maximum quality of 50" do
-        pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 1, quality = 49)
+        pass = Item.new("Backstage passes to a TAFKAL80ETC concert", DEFAULT_SELL_IN, MAXIMUM_QUALITY)
         shop = GildedRose.new([pass])
-        expect { shop.update_all }.to change { pass.quality }.by 1
+        expect { shop.update_all }.not_to change { pass.quality }
       end
     end
 
     describe "for conjured" do
       before do
-        @conjured = Item.new("Conjured Mana Cake", sell_in = 3, quality = 6)
+        @conjured = Item.new("Conjured Mana Cake", DEFAULT_SELL_IN, DEFAULT_QUALITY)
         @shop = GildedRose.new([@conjured])
       end
 
@@ -122,12 +128,12 @@ describe GildedRose do
       end
 
       it "doesn't reduce quality beyond 0" do
-        21.times { @shop.update_all }
+        (DEFAULT_QUALITY + 1).times { @shop.update_all }
         expect(@conjured.quality).to eq 0
       end
 
       it "reduces quality by 2 if past sell by date" do
-        conjured_past_date = Item.new("Conjured Mana Cake", -5, 20)
+        conjured_past_date = Item.new("Conjured Mana Cake", NEGATIVE_SELL_IN, DEFAULT_QUALITY)
         shop = GildedRose.new([conjured_past_date])
         expect { shop.update_all }.to change { conjured_past_date.quality }.by(-4)
       end

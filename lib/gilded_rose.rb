@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# the main class for the shop. Updates item attributes
 class GildedRose
   ITEM_TYPES = { brie: "Aged Brie",
                  sulfuras: "Sulfuras, Hand of Ragnaros",
@@ -43,8 +44,6 @@ class GildedRose
   end
 
   def quality_adjust_normal(item)
-    return if item.quality == MINIMUM_QUALITY
-
     item.quality -= (item.sell_in >= 0 ? 1 : 2)
     correct_too_low_quality(item)
   end
@@ -56,9 +55,6 @@ class GildedRose
   end
 
   def quality_adjust_passes(item)
-    return if
-      (item.quality == MAXIMUM_QUALITY && item.sell_in > 0) || item.quality == MINIMUM_QUALITY
-
     if item.sell_in > 10
       item.quality += 1
     elsif (6..10).include?(item.sell_in)
@@ -72,8 +68,6 @@ class GildedRose
   end
 
   def quality_adjust_conjured(item)
-    return if item.quality == MINIMUM_QUALITY
-
     item.quality -= (item.sell_in >= 0 ? 2 : 4)
     correct_too_low_quality(item)
   end
