@@ -5,7 +5,7 @@ class GildedRose
     @items = items
   end
 
-  def update_quality
+  def update_all
     @items.each do |item|
 
       if type(item) == :normal

@@ -12,7 +12,7 @@ GildedRose
 ---
 items - given as arg, a list of Items
 ---
-update_quality
+update_all
 
 
 Types of item and o/n changes
