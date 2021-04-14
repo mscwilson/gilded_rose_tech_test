@@ -7,30 +7,16 @@ class GildedRose
 
   def update_quality
     @items.each do |item|
-      # p type(item)
+
       if type(item) == :normal
-        item.quality -= 1 if item.quality > (0)
-      elsif item.quality < 50
-        item.quality = item.quality + 1
-        if item.name == "Backstage passes to a TAFKAL80ETC concert"
-          item.quality += 1 if item.sell_in < (11) && (item.quality < 50)
-          item.quality += 1 if item.sell_in < (6) && (item.quality < 50)
-        end
+        quality_adjust_normal(item)
+      elsif type(item) == :brie
+        quality_adjust_brie(item)
+      elsif type(item) == :passes
+        quality_adjust_passes(item)
       end
 
-      item.sell_in -= sell_in_change(item)
-
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert" && (item.name != "Sulfuras, Hand of Ragnaros")
-            item.quality = item.quality - 1 if item.quality > (0)
-          else
-            item.quality = item.quality - item.quality
-          end
-        elsif item.quality < 50
-          item.quality = item.quality + 1
-        end
-      end
+      update_sell_in(item)
     end
   end
 
@@ -39,13 +25,13 @@ class GildedRose
   def type(item)
     item_types = { brie: "Aged Brie",
                   sulfuras: "Sulfuras, Hand of Ragnaros",
-                  passes: "Backstage passes to a TAFKAL80ETC concert",
+                  passes: "Backstage passes to a TAFKAL80ETC concert"
                   }
     item_types.key(item.name) ? item_types.key(item.name) : :normal
   end
 
-  def sell_in_change(item)
-    type(item) == :sulfuras ? 0 : 1
+  def update_sell_in(item)
+    item.sell_in -= (type(item) == :sulfuras ? 0 : 1)
   end
 
   def quality_adjust_normal(item)
