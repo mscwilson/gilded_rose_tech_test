@@ -5,11 +5,6 @@ class GildedRose
     @items = items
   end
 
-  def update_single_item(item)
-    item
-  end
-
-
   def update_quality
     @items.each do |item|
       if (item.name != "Aged Brie") && (item.name != "Backstage passes to a TAFKAL80ETC concert")
@@ -34,5 +29,15 @@ class GildedRose
         end
       end
     end
+  end
+
+  private #---------------------------------------------
+
+  def type(item)
+    ITEM_TYPES = { brie: "Aged Brie",
+                  sulfuras: "Sulfuras, Hand of Ragnaros",
+                  passes: "Backstage passes to a TAFKAL80ETC concert",
+                  }
+    ITEM_TYPES.key(item) ? ITEM_TYPES.key(item) : :normal
   end
 end
