@@ -7,16 +7,19 @@ class GildedRose
 
   def update_quality
     @items.each do |item|
+      # p type(item)
       if (item.name != "Aged Brie") && (item.name != "Backstage passes to a TAFKAL80ETC concert")
-        item.quality = item.quality - 1 if item.quality > (0) && (item.name != "Sulfuras, Hand of Ragnaros")
+        item.quality -= 1 if item.quality > (0) && (item.name != "Sulfuras, Hand of Ragnaros")
       elsif item.quality < 50
         item.quality = item.quality + 1
         if item.name == "Backstage passes to a TAFKAL80ETC concert"
-          item.quality = item.quality + 1 if item.sell_in < (11) && (item.quality < 50)
-          item.quality = item.quality + 1 if item.sell_in < (6) && (item.quality < 50)
+          item.quality += 1 if item.sell_in < (11) && (item.quality < 50)
+          item.quality += 1 if item.sell_in < (6) && (item.quality < 50)
         end
       end
-      item.sell_in = item.sell_in - 1 if item.name != "Sulfuras, Hand of Ragnaros"
+
+      item.sell_in -= sell_in_change(item)
+
       if item.sell_in < 0
         if item.name != "Aged Brie"
           if item.name != "Backstage passes to a TAFKAL80ETC concert"
@@ -34,10 +37,15 @@ class GildedRose
   private #---------------------------------------------
 
   def type(item)
-    ITEM_TYPES = { brie: "Aged Brie",
+    item_types = { brie: "Aged Brie",
                   sulfuras: "Sulfuras, Hand of Ragnaros",
                   passes: "Backstage passes to a TAFKAL80ETC concert",
                   }
-    ITEM_TYPES.key(item) ? ITEM_TYPES.key(item) : :normal
+    item_types.key(item.name) ? item_types.key(item.name) : :normal
   end
+
+  def sell_in_change(item)
+    type(item) == :sulfuras ? 0 : 1
+  end
+
 end
