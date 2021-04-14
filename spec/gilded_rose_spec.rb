@@ -75,5 +75,45 @@ describe GildedRose do
       end
     end
 
+    describe "for backstage passes" do
+      before do
+        @pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 15, quality = 20)
+        @shop = GildedRose.new([@pass])
+      end
+
+      it "reduces sell_in by 1" do
+        expect { @shop.update_quality }.to change{@pass.sell_in}.by -1
+      end
+
+      it "increases quality by 1 if sell_in more than 10" do
+        expect { @shop.update_quality }.to change{@pass.quality}.by 1
+      end
+
+      it "increases quality by 2 if sell_in between 10 and 6" do
+        pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 10, quality = 20)
+        shop = GildedRose.new([pass])
+        expect { shop.update_quality }.to change{pass.quality}.by 2
+      end
+
+      it "increases quality by 3 if sell_in between 5 and 1" do
+        pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 1, quality = 20)
+        shop = GildedRose.new([pass])
+        expect { shop.update_quality }.to change{pass.quality}.by 3
+      end
+
+      it "sets quality to 0 if sell_in is 0 or less" do
+        pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 0, quality = 20)
+        shop = GildedRose.new([pass])
+        shop.update_quality
+        expect(pass.quality).to eq 0
+      end
+
+      it "has maximum quality of 50" do
+        pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 1, quality = 49)
+        shop = GildedRose.new([pass])
+        expect { shop.update_quality }.to change{pass.quality}.to 50
+      end
+    end
+
   end
 end
