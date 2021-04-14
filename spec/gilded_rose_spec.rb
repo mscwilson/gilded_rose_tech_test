@@ -2,12 +2,6 @@
 
 require "gilded_rose"
 
-DEFAULT_SELL_IN = 15
-NEGATIVE_SELL_IN = -5
-DEFAULT_QUALITY = 20
-MAXIMUM_QUALITY = GildedRose::MAXIMUM_QUALITY
-SULFURAS_QUALITY = 80
-
 describe GildedRose do
   describe "#update_all" do
     describe "for normal items" do

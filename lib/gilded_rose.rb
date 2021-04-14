@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+require_relative "item"
 
-# the main class for the shop. Updates item attributes
+# The main class for the shop. Updates item attributes.
 class GildedRose
   ITEM_TYPES = { brie: "Aged Brie",
                  sulfuras: "Sulfuras, Hand of Ragnaros",

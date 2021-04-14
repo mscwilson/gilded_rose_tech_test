@@ -11,12 +11,6 @@
           1,
           1,
           1,
-          1,
-          null,
-          1,
-          1,
-          1,
-          1,
           4,
           4,
           null,
@@ -150,6 +144,7 @@
       "/Users/mirandawilson/Makers/week10/gilded_rose_tech_test/lib/gilded_rose.rb": {
         "lines": [
           null,
+          1,
           null,
           null,
           1,
@@ -233,20 +228,6 @@
           null
         ]
       },
-      "/Users/mirandawilson/Makers/week10/gilded_rose_tech_test/spec/item_spec.rb": {
-        "lines": [
-          null,
-          null,
-          1,
-          null,
-          1,
-          1,
-          1,
-          1,
-          null,
-          null
-        ]
-      },
       "/Users/mirandawilson/Makers/week10/gilded_rose_tech_test/lib/item.rb": {
         "lines": [
           null,
@@ -265,8 +246,22 @@
           null,
           null
         ]
+      },
+      "/Users/mirandawilson/Makers/week10/gilded_rose_tech_test/spec/item_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null
+        ]
       }
     },
-    "timestamp": 1618421529
+    "timestamp": 1618423528
   }
 }
