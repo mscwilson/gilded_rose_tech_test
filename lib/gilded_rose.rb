@@ -16,8 +16,8 @@ class GildedRose
 
   def type(item)
     item_types = { brie: "Aged Brie",
-                   sulfuras: "Sulfuras, Hand of Ragnaros",
-                   passes: "Backstage passes to a TAFKAL80ETC concert" }
+                  sulfuras: "Sulfuras, Hand of Ragnaros",
+                  passes: "Backstage passes to a TAFKAL80ETC concert" }
     item_types.key(item.name) || :normal
   end
 
@@ -50,7 +50,7 @@ class GildedRose
   end
 
   def quality_adjust_passes(item)
-    return if item.quality == 50
+    return if (item.quality == 50 && item.sell_in > 0) || item.quality == 0
 
     if item.sell_in > 10
       item.quality += 1

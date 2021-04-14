@@ -3,14 +3,6 @@
 require "gilded_rose"
 
 describe GildedRose do
-  # describe "#update_all" do
-  #   xit "does not change the name" do
-  #     items = [Item.new("foo", 0, 0)]
-  #     GildedRose.new(items).update_all()
-  #     expect(items[0].name).to eq "fixme"
-  #   end
-  # end
-
   describe "#update_all" do
     describe "for normal items" do
       before do
@@ -102,7 +94,7 @@ describe GildedRose do
       end
 
       it "sets quality to 0 if sell_in is 0 or less" do
-        pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 0, quality = 20)
+        pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = -5, quality = 20)
         shop = GildedRose.new([pass])
         shop.update_all
         expect(pass.quality).to eq 0
@@ -111,7 +103,7 @@ describe GildedRose do
       it "has maximum quality of 50" do
         pass = Item.new(name = "Backstage passes to a TAFKAL80ETC concert", sell_in = 1, quality = 49)
         shop = GildedRose.new([pass])
-        expect { shop.update_all }.to change { pass.quality }.to 50
+        expect { shop.update_all }.to change { pass.quality }.by 1
       end
     end
   end

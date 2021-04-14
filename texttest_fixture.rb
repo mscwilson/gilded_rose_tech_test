@@ -7,6 +7,7 @@ puts "OMGHAI!"
 items = [
   Item.new(name = "+5 Dexterity Vest", sell_in = 0, quality = 20),
   Item.new(name = "Aged Brie", sell_in = 2, quality = 0),
+  Item.new(name = "Aged Brie", sell_in = 2, quality = 48),
   Item.new(name = "Elixir of the Mongoose", sell_in = 5, quality = 7),
   Item.new(name = "Sulfuras, Hand of Ragnaros", sell_in = 0, quality = 80),
   Item.new(name = "Sulfuras, Hand of Ragnaros", sell_in = -1, quality = 80),
@@ -17,7 +18,7 @@ items = [
   # Item.new(name = "Conjured Mana Cake", sell_in = 3, quality = 6) # <-- :O
 ]
 
-days = 6
+days = 10
 days = ARGV[0].to_i + 1 if ARGV.size > 0
 
 gilded_rose = GildedRose.new items
