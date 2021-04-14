@@ -8,8 +8,8 @@ class GildedRose
   def update_quality
     @items.each do |item|
       # p type(item)
-      if (item.name != "Aged Brie") && (item.name != "Backstage passes to a TAFKAL80ETC concert")
-        item.quality -= 1 if item.quality > (0) && (item.name != "Sulfuras, Hand of Ragnaros")
+      if type(item) == :normal
+        item.quality -= 1 if item.quality > (0)
       elsif item.quality < 50
         item.quality = item.quality + 1
         if item.name == "Backstage passes to a TAFKAL80ETC concert"
@@ -22,8 +22,8 @@ class GildedRose
 
       if item.sell_in < 0
         if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            item.quality = item.quality - 1 if item.quality > (0) && (item.name != "Sulfuras, Hand of Ragnaros")
+          if item.name != "Backstage passes to a TAFKAL80ETC concert" && (item.name != "Sulfuras, Hand of Ragnaros")
+            item.quality = item.quality - 1 if item.quality > (0)
           else
             item.quality = item.quality - item.quality
           end
@@ -46,6 +46,36 @@ class GildedRose
 
   def sell_in_change(item)
     type(item) == :sulfuras ? 0 : 1
+  end
+
+  def quality_adjust_normal(item)
+    return if item.quality == 0
+
+    if item.sell_in >= 0
+      item.quality -= 1
+    else
+      item.quality -= 2
+    end
+    item.quality = 0 if item.quality < 0
+  end
+
+  def quality_adjust_brie(item)
+    return if item.quality == 50
+    item.quality += 1
+  end
+
+  def quality_adjust_passes(item)
+    return if item.quality == 50
+    if item.sell_in > 10
+      item.quality += 1
+    elsif (6..10).include?(item.sell_in)
+      item.quality += 2
+    elsif (1..5).include?(item.sell_in)
+      item.quality += 3
+    else
+      item.quality = 0
+    end
+    item.quality = 50 if item.quality > 50
   end
 
 end
