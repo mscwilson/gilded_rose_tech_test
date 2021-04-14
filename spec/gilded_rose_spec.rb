@@ -11,21 +11,6 @@ describe GildedRose do
   #   end
   # end
 
-  describe "#update_single_item" do
-    describe "for normal items" do
-      before do
-        @normal = Item.new("normal item", 10, 20)
-        @shop = GildedRose.new([@normal])
-      end
-
-      it "reduces quality by 1" do
-        expect(@shop.update_single_item(@normal)).to eq @normal
-      end
-
-    end
-
-  end
-
   describe "#update_quality" do
     describe "for normal items" do
       before do
@@ -34,86 +19,61 @@ describe GildedRose do
       end
 
       it "reduces sell_in by 1" do
-        @shop.update_quality
-        # expect(@normal).to have_received(:sell_in=).with(@normal.sell_in - 1)
-        expect(@normal.quality).to eq 19
+        expect { @shop.update_quality }.to change{@normal.sell_in}.by -1
       end
 
       it "reduces quality by 1" do
-        @shop.update_quality
-        expect(@normal).to have_received(:quality=).with(@normal.quality - 1)
+        expect { @shop.update_quality }.to change{@normal.quality}.by -1
       end
 
       it "doesn't reduce quality beyond 0" do
-        allow(@normal).to receive(:quality).and_return(0)
-        @shop.update_quality
-        expect(@normal).not_to have_received(:quality=)
+        21.times { @shop.update_quality }
+        expect(@normal.quality).to eq 0
       end
 
       it "reduces quality by 2 if past sell by date" do
-        allow(@normal).to receive(:sell_in).and_return(-1)
-        @shop.update_quality
-        expect(@normal).to have_received(:quality=).with(@normal.quality - 1).twice
-      end
-
-      it "reduces quality by 1 if last day of sale" do
-        allow(@normal).to receive(:sell_in).and_return(0)
-        @shop.update_quality
-        expect(@normal).to have_received(:quality=).with(@normal.quality - 1)
+        normal_past_date = Item.new("normal", -5, 20)
+        shop = GildedRose.new([normal_past_date])
+        expect { shop.update_quality }.to change{normal_past_date.quality}.by -2
       end
     end
 
-    # describe "for aged brie" do
-    #   before do
-    #     @brie = double(:brie_item, name: "Aged Brie", sell_in: 2, quality: 0)
-    #     allow(@brie).to receive(:quality=)
-    #     allow(@brie).to receive(:sell_in=)
+    describe "for aged brie" do
+      before do
+        @brie = Item.new(name = "Aged Brie", sell_in = 2, quality = 0)
+        @shop = GildedRose.new([@brie])
+      end
 
-    #     @shop = GildedRose.new([@brie])
-    #   end
+      it "reduces sell_in by 1" do
+        expect { @shop.update_quality }.to change{@brie.sell_in}.by -1
+      end
 
-    #   it "reduces sell_in by 1" do
-    #     @shop.update_quality
-    #     expect(@brie).to have_received(:sell_in=).with(@brie.sell_in - 1)
-    #   end
+      it "increases quality by 1" do
+        expect { @shop.update_quality }.to change{@brie.quality}.by 1
+      end
 
-    #   it "increases quality by 1" do
-    #     @shop.update_quality
-    #     expect(@brie).to have_received(:quality=).with(@brie.quality + 1)
-    #   end
+      it "doesn't increase quality beyond 50" do
+        brie_high_quality = Item.new(name = "Aged Brie", sell_in = 2, quality = 50)
+        shop = GildedRose.new([brie_high_quality])
+        expect { shop.update_quality }.not_to change{brie_high_quality.quality}
+      end
+    end
 
-    #   it "doesn't increase quality beyond 50" do
-    #     allow(@brie).to receive(:quality).and_return(50)
-    #     @shop.update_quality
-    #     expect(@brie).not_to have_received(:quality=)
-    #   end
-    # end
+    describe "for sulfuras" do
+      before do
+        @sulfuras = Item.new(name = "Sulfuras, Hand of Ragnaros", sell_in = 0, quality = 80)
+        @shop = GildedRose.new([@sulfuras])
+      end
 
-    # describe "for sulfuras" do
-    #   before do
-    #     @sulfuras = double(:sulfuras_item, name: "Sulfuras", sell_in: 0, quality: 80)
-    #     allow(@sulfuras).to receive(:quality=)
-    #     allow(@sulfuras).to receive(:sell_in=)
+      it "does not change sell_in" do
+        expect { @shop.update_quality }.not_to change{@sulfuras.sell_in}
+      end
 
-    #     @shop = GildedRose.new([@sulfuras])
-    #   end
-
-    #   it "does not change sell_in" do
-    #     @shop.update_quality
-    #     expect(@sulfuras).not_to have_received(:sell_in=)
-    #   end
-
-    #   it "does not change quality" do
-    #     @shop.update_quality
-    #     expect(@sulfuras).not_to have_received(:quality=)
-    #   end
-
-    #   it "doesn't increase quality beyond 50" do
-    #     allow(@sulfuras).to receive(:quality).and_return(50)
-    #     @shop.update_quality
-    #     expect(@sulfuras).not_to have_received(:quality=)
-    #   end
-    # end
+      it "does not change quality" do
+        expect { @shop.update_quality }.not_to change{@sulfuras.quality}
+        expect(@sulfuras.quality).to eq 80
+      end
+    end
 
   end
 end

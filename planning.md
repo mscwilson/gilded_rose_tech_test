@@ -19,7 +19,7 @@ Types of item and o/n changes
 normal:
     sell by - 1
     quality - 1
-    if sell by == -1, quality - 2
+    if sell by > 0, quality - 2
     if quality == 0, no change
 aged brie:
     sell by - 1
