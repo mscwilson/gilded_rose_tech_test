@@ -106,5 +106,31 @@ describe GildedRose do
         expect { shop.update_all }.to change { pass.quality }.by 1
       end
     end
+
+    describe "for conjured" do
+      before do
+        @conjured = Item.new("Conjured Mana Cake", sell_in = 3, quality = 6)
+        @shop = GildedRose.new([@conjured])
+      end
+
+      it "reduces sell_in by 1" do
+        expect { @shop.update_all }.to change { @conjured.sell_in }.by(-1)
+      end
+
+      it "reduces quality by 1" do
+        expect { @shop.update_all }.to change { @conjured.quality }.by(-2)
+      end
+
+      it "doesn't reduce quality beyond 0" do
+        21.times { @shop.update_all }
+        expect(@conjured.quality).to eq 0
+      end
+
+      it "reduces quality by 2 if past sell by date" do
+        conjured_past_date = Item.new("Conjured Mana Cake", -5, 20)
+        shop = GildedRose.new([conjured_past_date])
+        expect { shop.update_all }.to change { conjured_past_date.quality }.by(-4)
+      end
+    end
   end
 end

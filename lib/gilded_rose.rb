@@ -17,7 +17,9 @@ class GildedRose
   def type(item)
     item_types = { brie: "Aged Brie",
                   sulfuras: "Sulfuras, Hand of Ragnaros",
-                  passes: "Backstage passes to a TAFKAL80ETC concert" }
+                  passes: "Backstage passes to a TAFKAL80ETC concert",
+                  conjured: "Conjured Mana Cake"
+                  }
     item_types.key(item.name) || :normal
   end
 
@@ -33,6 +35,8 @@ class GildedRose
       quality_adjust_brie(item)
     when :passes
       quality_adjust_passes(item)
+    when :conjured
+      quality_adjust_conjured(item)
     end
   end
 
@@ -62,5 +66,12 @@ class GildedRose
       item.quality = 0
     end
     item.quality = 50 if item.quality > 50
+  end
+
+  def quality_adjust_conjured(item)
+    return if item.quality == 0
+
+    item.quality -= (item.sell_in >= 0 ? 2 : 4)
+    item.quality = 0 if item.quality < 0
   end
 end
