@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class GildedRose
+  ITEM_TYPES = { brie: "Aged Brie",
+                 sulfuras: "Sulfuras, Hand of Ragnaros",
+                 passes: "Backstage passes to a TAFKAL80ETC concert",
+                 conjured: "Conjured Mana Cake" }
+  MAXIMUM_QUALITY = 50
+  MINIMUM_QUALITY = 0
+
   def initialize(items)
     @items = items
   end
@@ -15,12 +22,7 @@ class GildedRose
   private #---------------------------------------------
 
   def type(item)
-    item_types = { brie: "Aged Brie",
-                  sulfuras: "Sulfuras, Hand of Ragnaros",
-                  passes: "Backstage passes to a TAFKAL80ETC concert",
-                  conjured: "Conjured Mana Cake"
-                  }
-    item_types.key(item.name) || :normal
+    ITEM_TYPES.key(item.name) || :normal
   end
 
   def update_sell_in(item)
@@ -41,20 +43,21 @@ class GildedRose
   end
 
   def quality_adjust_normal(item)
-    return if item.quality == 0
+    return if item.quality == MINIMUM_QUALITY
 
     item.quality -= (item.sell_in >= 0 ? 1 : 2)
-    item.quality = 0 if item.quality < 0
+    correct_too_low_quality(item)
   end
 
   def quality_adjust_brie(item)
-    return if item.quality == 50
+    return if item.quality == MAXIMUM_QUALITY
 
     item.quality += 1
   end
 
   def quality_adjust_passes(item)
-    return if (item.quality == 50 && item.sell_in > 0) || item.quality == 0
+    return if
+      (item.quality == MAXIMUM_QUALITY && item.sell_in > 0) || item.quality == MINIMUM_QUALITY
 
     if item.sell_in > 10
       item.quality += 1
@@ -65,13 +68,21 @@ class GildedRose
     else
       item.quality = 0
     end
-    item.quality = 50 if item.quality > 50
+    correct_too_high_quality(item)
   end
 
   def quality_adjust_conjured(item)
-    return if item.quality == 0
+    return if item.quality == MINIMUM_QUALITY
 
     item.quality -= (item.sell_in >= 0 ? 2 : 4)
-    item.quality = 0 if item.quality < 0
+    correct_too_low_quality(item)
+  end
+
+  def correct_too_low_quality(item)
+    item.quality = MINIMUM_QUALITY if item.quality < MINIMUM_QUALITY
+  end
+
+  def correct_too_high_quality(item)
+    item.quality = MAXIMUM_QUALITY if item.quality > MAXIMUM_QUALITY
   end
 end
