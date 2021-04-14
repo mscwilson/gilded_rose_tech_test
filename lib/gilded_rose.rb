@@ -1,12 +1,18 @@
+# frozen_string_literal: true
+
 class GildedRose
   def initialize(items)
     @items = items
   end
 
+  def update_single_item(item)
+    item
+  end
+
+
   def update_quality
     @items.each do |item|
       if (item.name != "Aged Brie") && (item.name != "Backstage passes to a TAFKAL80ETC concert")
-        p "should see this"
         item.quality = item.quality - 1 if item.quality > (0) && (item.name != "Sulfuras, Hand of Ragnaros")
       elsif item.quality < 50
         item.quality = item.quality + 1
